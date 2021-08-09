@@ -9,9 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"go.uber.org/zap"
-
 	"github.com/gorilla/websocket"
+	"go.uber.org/zap"
 )
 
 var upGrader = websocket.Upgrader{
@@ -75,8 +74,9 @@ func HandleReadErr(conn *Conn, err error) {
 }
 
 func StartWSServer(address string) {
+	logger.Info("websocket server start, address: %s", address)
+
 	http.HandleFunc("/ws", wsHandler)
-	logger.Logger.Info("websocket server start")
 	err := http.ListenAndServe(address, nil)
 	if err != nil {
 		panic(err)

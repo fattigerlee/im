@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"go.uber.org/zap"
+	"google.golang.org/grpc"
 	"im/config"
 	"im/internal/connect"
 	"im/pkg/db"
@@ -13,9 +15,6 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-
-	"go.uber.org/zap"
-	"google.golang.org/grpc"
 )
 
 func main() {
@@ -40,6 +39,13 @@ func main() {
 
 	server := grpc.NewServer(grpc.UnaryInterceptor(interceptor.NewInterceptor("connect_interceptor", nil)))
 
+	pb.RegisterConnectIntServer(server, &connect.ConnIntServer{})
+
+	listener, err := net.Listen("tcp", config.GetConnectServer().LocalAddr)
+	if err != nil {
+		panic(err)
+	}
+
 	// 监听服务关闭信号，服务平滑重启
 	go func() {
 		c := make(chan os.Signal, 0)
@@ -51,13 +57,6 @@ func main() {
 
 		server.GracefulStop()
 	}()
-
-	pb.RegisterConnectIntServer(server, &connect.ConnIntServer{})
-
-	listener, err := net.Listen("tcp", config.GetConnectServer().LocalAddr)
-	if err != nil {
-		panic(err)
-	}
 
 	logger.Logger.Info("rpc服务已经开启")
 	err = server.Serve(listener)
