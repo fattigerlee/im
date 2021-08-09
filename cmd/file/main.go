@@ -1,17 +1,16 @@
 package main
 
 import (
-	"gim/pkg/logger"
-	"gim/pkg/util"
+	"fmt"
+	"github.com/gin-gonic/gin"
+	"im/config"
+	"im/pkg/logger"
+	"im/pkg/util"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/gin-gonic/gin"
 )
-
-const baseUrl = "http://111.229.238.28:8085/file/"
 
 type Response struct {
 	Code    int         `json:"code"`
@@ -20,10 +19,14 @@ type Response struct {
 }
 
 func main() {
+	// 初始化配置
+	config.Init("config.yaml")
+
 	// 初始化日志
-	logger.Init()
+	logger.Init(config.GetFileServer().LogFilePath, config.GetFileServer().LogTarget, config.GetFileServer().LogLevel)
+
 	router := gin.Default()
-	router.Static("/file", "/root/file")
+	router.Static("/file", config.GetFileServer().ResourcePath)
 
 	// Set a lower memory limit for multipart forms (default is 32 MiB)
 	router.MaxMultipartMemory = 8 << 20 // 8 MiB
@@ -31,24 +34,30 @@ func main() {
 		// single file
 		file, err := c.FormFile("file")
 		if err != nil {
-			c.JSON(http.StatusOK, Response{Code: 1001, Message: err.Error()})
+			c.JSON(http.StatusOK, Response{
+				Code:    1001,
+				Message: err.Error(),
+			})
 			return
 		}
 
 		filenames := strings.Split(file.Filename, ".")
 		name := strconv.FormatInt(time.Now().UnixNano(), 10) + "-" + util.RandString(30) + "." + filenames[len(filenames)-1]
-		filePath := "/root/file/" + name
-		err = c.SaveUploadedFile(file, filePath)
-		if err != nil {
-			c.JSON(http.StatusOK, Response{Code: 1001, Message: err.Error()})
+		filePath := config.GetFileServer().ResourcePath + name
+		if err = c.SaveUploadedFile(file, filePath); err != nil {
+			c.JSON(http.StatusOK, Response{
+				Code:    1001,
+				Message: err.Error(),
+			})
 			return
 		}
 
+		url := fmt.Sprintf("http://%s/file/%s", config.GetFileServer().WideAddr, filePath)
 		c.JSON(http.StatusOK, Response{
 			Code:    0,
 			Message: "success",
-			Data:    map[string]string{"url": baseUrl + name},
+			Data:    map[string]string{"url": url},
 		})
 	})
-	router.Run(":8085")
+	_ = router.Run(config.GetFileServer().LocalAddr)
 }

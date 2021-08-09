@@ -1,9 +1,9 @@
 package model
 
 import (
-	"gim/pkg/logger"
-	"gim/pkg/pb"
-	"gim/pkg/util"
+	"im/pkg/logger"
+	"im/pkg/pb"
+	"im/pkg/util"
 	"strconv"
 	"strings"
 	"time"

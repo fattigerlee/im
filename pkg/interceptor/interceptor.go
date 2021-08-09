@@ -2,11 +2,11 @@ package interceptor
 
 import (
 	"context"
-	"gim/pkg/gerrors"
-	"gim/pkg/grpclib"
-	"gim/pkg/logger"
-	"gim/pkg/pb"
-	"gim/pkg/rpc"
+	"im/pkg/gerrors"
+	"im/pkg/grpclib"
+	"im/pkg/logger"
+	"im/pkg/pb"
+	"im/pkg/rpc"
 	"strings"
 
 	"go.uber.org/zap"

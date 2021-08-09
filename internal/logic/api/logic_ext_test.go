@@ -3,8 +3,8 @@ package api
 import (
 	"context"
 	"fmt"
-	"gim/pkg/pb"
-	"gim/pkg/util"
+	"im/pkg/pb"
+	"im/pkg/util"
 	"strconv"
 	"testing"
 	"time"

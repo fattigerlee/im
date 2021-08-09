@@ -3,7 +3,7 @@ package grpclib
 import (
 	"context"
 	"errors"
-	"gim/pkg/logger"
+	"im/pkg/logger"
 
 	"go.uber.org/zap"
 

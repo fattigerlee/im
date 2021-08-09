@@ -3,9 +3,9 @@ package rpc
 import (
 	"context"
 	"fmt"
-	"gim/pkg/grpclib"
-	"gim/pkg/logger"
-	"gim/pkg/pb"
+	"im/pkg/grpclib"
+	"im/pkg/logger"
+	"im/pkg/pb"
 
 	"google.golang.org/grpc"
 )
@@ -35,14 +35,4 @@ func InitConnectIntClient(addr string) {
 	}
 
 	ConnectIntClient = pb.NewConnectIntClient(conn)
-}
-
-func InitBusinessIntClient(addr string) {
-	conn, err := grpc.DialContext(context.TODO(), addr, grpc.WithInsecure(), grpc.WithUnaryInterceptor(interceptor))
-	if err != nil {
-		logger.Sugar.Error(err)
-		panic(err)
-	}
-
-	BusinessIntClient = pb.NewBusinessIntClient(conn)
 }

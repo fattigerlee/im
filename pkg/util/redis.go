@@ -1,8 +1,8 @@
 package util
 
 import (
-	"gim/pkg/db"
-	"gim/pkg/logger"
+	"im/pkg/db"
+	"im/pkg/logger"
 	"time"
 
 	"github.com/go-redis/redis"

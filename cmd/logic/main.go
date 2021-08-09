@@ -1,14 +1,14 @@
 package main
 
 import (
-	"gim/config"
-	"gim/internal/logic/api"
-	"gim/pkg/db"
-	"gim/pkg/interceptor"
-	"gim/pkg/logger"
-	"gim/pkg/pb"
-	"gim/pkg/rpc"
-	"gim/pkg/urlwhitelist"
+	"im/config"
+	"im/internal/logic/api"
+	"im/pkg/db"
+	"im/pkg/interceptor"
+	"im/pkg/logger"
+	"im/pkg/pb"
+	"im/pkg/rpc"
+	"im/pkg/urlwhitelist"
 	"net"
 	"os"
 	"os/signal"
@@ -19,13 +19,18 @@ import (
 )
 
 func main() {
-	logger.Init()
-	db.InitMysql(config.Logic.MySQL)
-	db.InitRedis(config.Logic.RedisIP, config.Logic.RedisPassword)
+	// 初始化配置
+	config.Init("config.yaml")
 
-	// 初始化RpcClient
-	rpc.InitConnectIntClient(config.RPCAddr.ConnectRPCAddr)
-	rpc.InitBusinessIntClient(config.RPCAddr.BusinessRPCAddr)
+	// 初始化日志
+	logger.Init(config.GetLogicServer().LogFilePath, config.GetLogicServer().LogTarget, config.GetLogicServer().LogTarget)
+
+	// 初始化数据库
+	db.InitMysql(config.GetMysql())
+	db.InitRedis(config.GetRedis())
+
+	// 初始化内部rpc client
+	rpc.InitConnectIntClient(config.GetRpcAddr().ConnectServerAddr)
 
 	server := grpc.NewServer(grpc.UnaryInterceptor(interceptor.NewInterceptor("logic_int_interceptor", urlwhitelist.Logic)))
 
@@ -40,7 +45,8 @@ func main() {
 
 	pb.RegisterLogicIntServer(server, &api.LogicIntServer{})
 	pb.RegisterLogicExtServer(server, &api.LogicExtServer{})
-	listen, err := net.Listen("tcp", config.Logic.RPCListenAddr)
+
+	listen, err := net.Listen("tcp", config.GetLogicServer().LocalAddr)
 	if err != nil {
 		panic(err)
 	}

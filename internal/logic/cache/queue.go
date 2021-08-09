@@ -1,8 +1,8 @@
 package cache
 
 import (
-	"gim/pkg/db"
-	"gim/pkg/gerrors"
+	"im/pkg/db"
+	"im/pkg/gerrors"
 )
 
 type queue struct{}

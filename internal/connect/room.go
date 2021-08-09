@@ -2,7 +2,7 @@ package connect
 
 import (
 	"container/list"
-	"gim/pkg/pb"
+	"im/pkg/pb"
 	"sync"
 )
 

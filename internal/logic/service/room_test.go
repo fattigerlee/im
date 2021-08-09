@@ -2,9 +2,9 @@ package service
 
 import (
 	"fmt"
-	"gim/internal/logic/cache"
-	"gim/pkg/pb"
-	"gim/pkg/util"
+	"im/internal/logic/cache"
+	"im/pkg/pb"
+	"im/pkg/util"
 	"testing"
 	"time"
 )

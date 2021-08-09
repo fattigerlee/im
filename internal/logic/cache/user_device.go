@@ -1,9 +1,9 @@
 package cache
 
 import (
-	"gim/internal/logic/model"
-	"gim/pkg/db"
-	"gim/pkg/gerrors"
+	"im/internal/logic/model"
+	"im/pkg/db"
+	"im/pkg/gerrors"
 	"strconv"
 	"time"
 

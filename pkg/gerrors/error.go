@@ -3,8 +3,8 @@ package gerrors
 import (
 	"context"
 	"fmt"
-	"gim/pkg/logger"
-	"gim/pkg/util"
+	"im/pkg/logger"
+	"im/pkg/util"
 
 	"go.uber.org/zap"
 	"google.golang.org/grpc"

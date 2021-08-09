@@ -2,8 +2,8 @@ package util
 
 import (
 	"encoding/json"
-	"gim/pkg/logger"
-	"gim/pkg/pb"
+	"im/pkg/logger"
+	"im/pkg/pb"
 
 	"github.com/golang/protobuf/proto"
 	jsoniter "github.com/json-iterator/go"

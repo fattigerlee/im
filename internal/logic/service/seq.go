@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"gim/internal/logic/dao"
+	"im/internal/logic/dao"
 )
 
 type seqService struct{}

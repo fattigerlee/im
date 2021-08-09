@@ -3,9 +3,9 @@ package api
 import (
 	"context"
 	"fmt"
-	"gim/pkg/logger"
-	"gim/pkg/pb"
-	"gim/pkg/util"
+	"im/pkg/logger"
+	"im/pkg/pb"
+	"im/pkg/util"
 	"testing"
 	"time"
 

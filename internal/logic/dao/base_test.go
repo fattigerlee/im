@@ -1,7 +1,7 @@
 package dao
 
 import (
-	"gim/pkg/db"
+	"im/pkg/db"
 )
 
 func init() {

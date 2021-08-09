@@ -2,13 +2,13 @@ package api
 
 import (
 	"context"
-	"gim/internal/logic/dao"
-	"gim/internal/logic/model"
-	"gim/internal/logic/service"
-	"gim/pkg/gerrors"
-	"gim/pkg/grpclib"
-	"gim/pkg/logger"
-	"gim/pkg/pb"
+	"im/internal/logic/dao"
+	"im/internal/logic/model"
+	"im/internal/logic/service"
+	"im/pkg/gerrors"
+	"im/pkg/grpclib"
+	"im/pkg/logger"
+	"im/pkg/pb"
 )
 
 type LogicExtServer struct{}

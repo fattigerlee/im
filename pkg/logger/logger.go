@@ -15,11 +15,8 @@ const (
 )
 
 var (
-	Leavel = zap.DebugLevel
-	Target = Console
-)
-
-var (
+	Level  zapcore.Level // 日志等级
+	Target string        // 日志输出目标
 	Logger *zap.Logger
 	Sugar  *zap.SugaredLogger
 )
@@ -45,26 +42,39 @@ func TimeEncoder(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
 	enc.AppendString(t.Format("2006-01-02 15:04:05.000"))
 }
 
-func Init() {
+func Init(filePath string, target string, level string) {
+	Target = target
+
+	switch level {
+	case "debug":
+		Level = zapcore.DebugLevel
+	case "info":
+		Level = zapcore.InfoLevel
+	case "error":
+		Level = zapcore.ErrorLevel
+	default:
+		Level = zapcore.DebugLevel
+	}
+
 	w := zapcore.AddSync(&lumberjackv2.Logger{
-		Filename:   "log/im.log",
+		Filename:   filePath,
 		MaxSize:    1024, // megabytes
 		MaxBackups: 10,
 		MaxAge:     7, // days
 	})
 
 	var writeSyncer zapcore.WriteSyncer
-	if Target == Console {
+	switch Target {
+	case Console:
 		writeSyncer = zapcore.NewMultiWriteSyncer(zapcore.AddSync(os.Stdout))
-	}
-	if Target == File {
+	case File:
 		writeSyncer = zapcore.NewMultiWriteSyncer(w)
 	}
 
 	core := zapcore.NewCore(
 		zapcore.NewConsoleEncoder(NewEncoderConfig()),
 		writeSyncer,
-		Leavel,
+		Level,
 	)
 	Logger = zap.New(core, zap.AddCaller())
 	Sugar = Logger.Sugar()

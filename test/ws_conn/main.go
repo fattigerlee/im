@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"gim/pkg/pb"
-	"gim/pkg/util"
+	"im/pkg/pb"
+	"im/pkg/util"
 	"io/ioutil"
 	"net/http"
 	"time"

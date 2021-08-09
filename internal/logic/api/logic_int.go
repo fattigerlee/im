@@ -2,11 +2,11 @@ package api
 
 import (
 	"context"
-	"gim/internal/logic/model"
-	"gim/internal/logic/service"
-	"gim/pkg/gerrors"
-	"gim/pkg/logger"
-	"gim/pkg/pb"
+	"im/internal/logic/model"
+	"im/internal/logic/service"
+	"im/pkg/gerrors"
+	"im/pkg/logger"
+	"im/pkg/pb"
 )
 
 type LogicIntServer struct{}

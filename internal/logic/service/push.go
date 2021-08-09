@@ -2,14 +2,14 @@ package service
 
 import (
 	"context"
-	"gim/internal/logic/cache"
-	"gim/internal/logic/model"
-	"gim/pkg/gerrors"
-	"gim/pkg/grpclib"
-	"gim/pkg/logger"
-	"gim/pkg/pb"
-	"gim/pkg/topic"
-	"gim/pkg/util"
+	"im/internal/logic/cache"
+	"im/internal/logic/model"
+	"im/pkg/gerrors"
+	"im/pkg/grpclib"
+	"im/pkg/logger"
+	"im/pkg/pb"
+	"im/pkg/topic"
+	"im/pkg/util"
 	"time"
 
 	"github.com/golang/protobuf/proto"

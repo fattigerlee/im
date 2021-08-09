@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	"gim/internal/logic/model"
-	"gim/pkg/pb"
+	"im/internal/logic/model"
+	"im/pkg/pb"
 	"reflect"
 	"testing"
 )

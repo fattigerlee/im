@@ -2,8 +2,8 @@ package connect
 
 import (
 	"fmt"
-	"gim/pkg/logger"
-	"gim/pkg/util"
+	"im/pkg/logger"
+	"im/pkg/util"
 	"io"
 	"net/http"
 	"strings"
@@ -14,7 +14,7 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var upgrader = websocket.Upgrader{
+var upGrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 65536,
 	CheckOrigin: func(r *http.Request) bool {
@@ -23,7 +23,7 @@ var upgrader = websocket.Upgrader{
 }
 
 func wsHandler(w http.ResponseWriter, r *http.Request) {
-	wsConn, err := upgrader.Upgrade(w, r, nil)
+	wsConn, err := upGrader.Upgrade(w, r, nil)
 	if err != nil {
 		logger.Sugar.Error(err)
 		return

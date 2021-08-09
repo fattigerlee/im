@@ -2,10 +2,10 @@ package cache
 
 import (
 	"fmt"
-	"gim/pkg/db"
-	"gim/pkg/gerrors"
-	"gim/pkg/pb"
-	"gim/pkg/util"
+	"im/pkg/db"
+	"im/pkg/gerrors"
+	"im/pkg/pb"
+	"im/pkg/util"
 	"strconv"
 	"time"
 

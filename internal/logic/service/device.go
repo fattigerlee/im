@@ -2,10 +2,10 @@ package service
 
 import (
 	"context"
-	"gim/internal/logic/cache"
-	"gim/internal/logic/dao"
-	"gim/internal/logic/model"
-	"gim/pkg/logger"
+	"im/internal/logic/cache"
+	"im/internal/logic/dao"
+	"im/internal/logic/model"
+	"im/pkg/logger"
 
 	"go.uber.org/zap"
 )

@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"gim/internal/logic/cache"
+	"im/internal/logic/cache"
 )
 
 type deviceAckService struct{}

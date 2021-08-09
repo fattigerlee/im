@@ -3,11 +3,11 @@ package connect
 import (
 	"container/list"
 	"context"
-	"gim/config"
-	"gim/pkg/grpclib"
-	"gim/pkg/logger"
-	"gim/pkg/pb"
-	"gim/pkg/rpc"
+	"im/config"
+	"im/pkg/grpclib"
+	"im/pkg/logger"
+	"im/pkg/pb"
+	"im/pkg/rpc"
 	"sync"
 
 	"go.uber.org/zap"
@@ -15,7 +15,6 @@ import (
 	"github.com/golang/protobuf/proto"
 	"google.golang.org/grpc/status"
 
-	"github.com/alberliu/gn"
 	"github.com/gorilla/websocket"
 )
 
@@ -26,7 +25,6 @@ const (
 
 type Conn struct {
 	CoonType int8            // 连接类型
-	TCP      *gn.Conn        // tcp连接
 	WSMutex  sync.Mutex      // WS写锁
 	WS       *websocket.Conn // websocket连接
 	UserId   int64           // 用户ID
@@ -37,13 +35,7 @@ type Conn struct {
 
 // Write 写入数据
 func (c *Conn) Write(bytes []byte) error {
-	if c.CoonType == CoonTypeTCP {
-		return encoder.EncodeToWriter(c.TCP, bytes)
-	} else if c.CoonType == ConnTypeWS {
-		return c.WriteToWS(bytes)
-	}
-	logger.Logger.Error("unknown conn type", zap.Any("conn", c))
-	return nil
+	return c.WriteToWS(bytes)
 }
 
 func (c *Conn) WriteToWS(bytes []byte) error {
@@ -71,21 +63,11 @@ func (c *Conn) Close() error {
 		})
 	}
 
-	if c.CoonType == CoonTypeTCP {
-		return c.TCP.Close()
-	} else if c.CoonType == ConnTypeWS {
-		return c.WS.Close()
-	}
-	return nil
+	return c.WS.Close()
 }
 
 func (c *Conn) GetAddr() string {
-	if c.CoonType == CoonTypeTCP {
-		return c.TCP.GetAddr()
-	} else if c.CoonType == ConnTypeWS {
-		return c.WS.RemoteAddr().String()
-	}
-	return ""
+	return c.WS.RemoteAddr().String()
 }
 
 func (c *Conn) HandleMessage(bytes []byte) {
@@ -169,7 +151,7 @@ func (c *Conn) SignIn(input pb.Input) {
 		UserId:     signIn.UserId,
 		DeviceId:   signIn.DeviceId,
 		Token:      signIn.Token,
-		ConnAddr:   config.Connect.LocalAddr,
+		ConnAddr:   config.GetConnectServer().LocalAddr,
 		ClientAddr: c.GetAddr(),
 	})
 
@@ -245,6 +227,6 @@ func (c *Conn) SubscribedRoom(input pb.Input) {
 		DeviceId: c.DeviceId,
 		RoomId:   subscribeRoom.RoomId,
 		Seq:      subscribeRoom.Seq,
-		ConnAddr: config.Connect.LocalAddr,
+		ConnAddr: config.GetConnectServer().LocalAddr,
 	})
 }

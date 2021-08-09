@@ -2,39 +2,37 @@ package main
 
 import (
 	"context"
-	"gim/config"
-	"gim/internal/connect"
-	"gim/pkg/db"
-	"gim/pkg/interceptor"
-	"gim/pkg/logger"
-	"gim/pkg/pb"
-	"gim/pkg/rpc"
+	"im/config"
+	"im/internal/connect"
+	"im/pkg/db"
+	"im/pkg/interceptor"
+	"im/pkg/logger"
+	"im/pkg/pb"
+	"im/pkg/rpc"
 	"net"
 	"os"
 	"os/signal"
 	"syscall"
 
-	"google.golang.org/grpc"
-
 	"go.uber.org/zap"
+	"google.golang.org/grpc"
 )
 
 func main() {
-	logger.Init()
+	// 初始化配置
+	config.Init("config.yaml")
 
-	db.InitRedis(config.Connect.RedisIP, config.Connect.RedisPassword)
+	// 初始化日志
+	logger.Init(config.GetConnectServer().LogFilePath, config.GetConnectServer().LogTarget, config.GetConnectServer().LogTarget)
 
-	// 初始化Rpc Client
-	rpc.InitLogicIntClient(config.RPCAddr.LogicRPCAddr)
+	db.InitRedis(config.GetRedis())
 
-	// 启动TCP长链接服务器
-	go func() {
-		connect.StartTCPServer()
-	}()
+	// 初始化rpc client
+	rpc.InitLogicIntClient(config.GetRpcAddr().LogicServerAddr)
 
 	// 启动WebSocket长链接服务器
 	go func() {
-		connect.StartWSServer(config.Connect.WSListenAddr)
+		connect.StartWSServer(config.GetConnectServer().LocalWsAddr)
 	}()
 
 	// 启动服务订阅
@@ -48,14 +46,15 @@ func main() {
 		signal.Notify(c, syscall.SIGTERM)
 		s := <-c
 		logger.Logger.Info("server stop start", zap.Any("signal", s))
-		rpc.LogicIntClient.ServerStop(context.TODO(), &pb.ServerStopReq{ConnAddr: config.Connect.LocalAddr})
+		_, _ = rpc.LogicIntClient.ServerStop(context.TODO(), &pb.ServerStopReq{ConnAddr: config.GetConnectServer().LocalAddr})
 		logger.Logger.Info("server stop end")
 
 		server.GracefulStop()
 	}()
 
 	pb.RegisterConnectIntServer(server, &connect.ConnIntServer{})
-	listener, err := net.Listen("tcp", config.Connect.RPCListenAddr)
+
+	listener, err := net.Listen("tcp", config.GetConnectServer().LocalAddr)
 	if err != nil {
 		panic(err)
 	}

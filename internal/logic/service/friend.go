@@ -2,11 +2,11 @@ package service
 
 import (
 	"context"
-	"gim/internal/logic/dao"
-	"gim/internal/logic/model"
-	"gim/pkg/gerrors"
-	"gim/pkg/pb"
-	"gim/pkg/rpc"
+	"im/internal/logic/dao"
+	"im/internal/logic/model"
+	"im/pkg/gerrors"
+	"im/pkg/pb"
+	"im/pkg/rpc"
 )
 
 type friendService struct{}

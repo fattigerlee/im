@@ -1,0 +1,40 @@
+rpc_addr:
+  logic_server_addr: addrs:///127.0.0.1:50100
+  connect_server_addr: addrs:///127.0.0.1:50000
+
+file_server:
+  local_addr: :8081
+  wide_addr: 192.168.2.11:8081
+  resource_path: /root/file
+  log_file_path: file_server.log
+  log_level: debug
+  log_target: console
+
+logic_server:
+  local_addr: :50100
+  log_file_path: logic_server.log
+  log_level: debug
+  log_target: console
+
+connect_server:
+  local_addr: :50000
+  local_ws_addr: :8080
+  subscribe_num: 100
+  log_file_path: logic_server.log
+  log_level: debug
+  log_target: console
+
+mysql:
+  host: 192.168.2.11
+  port: 3306
+  db_name: im
+  username: root
+  password: "!0!TtQJRg73Bptr&"
+  auto_create_db: true
+  auto_migrate_table: true
+  debug: true
+
+redis:
+  addr: 192.168.2.11:6379
+  password: 111111
+

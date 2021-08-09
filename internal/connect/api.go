@@ -2,9 +2,9 @@ package connect
 
 import (
 	"context"
-	"gim/pkg/grpclib"
-	"gim/pkg/logger"
-	"gim/pkg/pb"
+	"im/pkg/grpclib"
+	"im/pkg/logger"
+	"im/pkg/pb"
 
 	"go.uber.org/zap"
 )

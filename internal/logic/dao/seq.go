@@ -2,8 +2,8 @@ package dao
 
 import (
 	"database/sql"
-	"gim/pkg/db"
-	"gim/pkg/gerrors"
+	"im/pkg/db"
+	"im/pkg/gerrors"
 )
 
 const (

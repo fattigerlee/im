@@ -2,7 +2,7 @@ package rpc
 
 import (
 	"context"
-	"gim/pkg/gerrors"
+	"im/pkg/gerrors"
 
 	"google.golang.org/grpc"
 )

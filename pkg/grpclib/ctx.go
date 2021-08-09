@@ -2,8 +2,8 @@ package grpclib
 
 import (
 	"context"
-	"gim/pkg/gerrors"
-	"gim/pkg/logger"
+	"im/pkg/gerrors"
+	"im/pkg/logger"
 	"strconv"
 
 	"google.golang.org/grpc/metadata"

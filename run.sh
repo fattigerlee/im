@@ -1,37 +1,37 @@
-cd cmd/business
-rm -f business
-go build -o business main.go
-echo "打包business成功"
-pkill business
-echo "停止business服务"
-nohup ./business &
-echo "启动business服务"
+#!/bin/bash
 
-cd ../logic
-rm -f logic
-go build -o logic main.go
-echo "打包logic成功"
-pkill logic
-echo "停止logic服务"
-nohup ./logic &
-echo "启动logic服务"
+mkdir -p bin
 
-cd ../connect
-rm -f connect
-go build -o connect main.go
-echo "打包connect成功"
-pkill connect
-echo "停止connect服务"
+echo "打包file_server"
+go build -o bin/file_server cmd/file/main.go
+
+echo "打包logic_server"
+go build -o bin/logic_server cmd/logic/main.go
+
+echo "打包connect_server"
+go build -o bin/connect_server cmd/connect/main.go
+
+cd bin
+
+echo "停止file_server服务"
+pkill file_server
+
+echo "停止logic_server服务"
+pkill logic_server
+
+echo "停止connect_server服务"
+pkill connect_server
+
 sleep 2
-nohup ./connect &
-echo "启动connect服务"
 
-cd ../file
-rm -f file
-go build -o file main.go
-echo "打包file成功"
-pkill file
-echo "停止file服务"
-nohup ./file &
-echo "启动file服务"
+rm -rf *.out *.log
+
+echo "启动file_server服务"
+nohup ./file_server &
+
+echo "启动logic_server服务"
+nohup ./logic_server &
+
+echo "启动connect_server服务"
+nohup ./connect_server &
 

@@ -2,7 +2,7 @@ package util
 
 import (
 	"fmt"
-	"gim/pkg/logger"
+	"im/pkg/logger"
 	"runtime"
 
 	"go.uber.org/zap"

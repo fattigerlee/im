@@ -2,11 +2,11 @@ package cache
 
 import (
 	"fmt"
-	"gim/internal/logic/model"
-	"gim/pkg/util"
+	"im/internal/logic/model"
+	"im/pkg/util"
 	"testing"
 
-	_ "gim/pkg/db"
+	_ "im/pkg/db"
 )
 
 func TestGroupUserCache_Get(t *testing.T) {

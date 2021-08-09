@@ -1,7 +1,7 @@
 package connect
 
 import (
-	"gim/pkg/pb"
+	"im/pkg/pb"
 	"sync"
 )
 

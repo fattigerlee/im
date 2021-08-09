@@ -1,14 +1,13 @@
 package db
 
 import (
+	"database/sql"
 	"fmt"
-	"gim/config"
-	"gim/pkg/logger"
-
 	"github.com/go-redis/redis"
-	"github.com/jinzhu/gorm"
-
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/jinzhu/gorm"
+	"im/config"
+	"im/pkg/logger"
 )
 
 var (
@@ -17,41 +16,79 @@ var (
 )
 
 // InitMysql 初始化MySQL
-func InitMysql(dataSource string) {
+func InitMysql(cfg *config.Mysql) {
 	logger.Logger.Info("init mysql")
+
+	// 所有表默认以im_开头
+	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
+		return "im_" + defaultTableName
+	}
+
+	// 自动创建数据库
+	autoCreateMysql(cfg)
+
 	var err error
-	DB, err = gorm.Open("mysql", dataSource)
-	if err != nil {
+	if DB, err = gorm.Open("mysql", cfg.Dsn); err != nil {
 		panic(err)
 	}
-	DB.SingularTable(true)
-	DB.LogMode(true)
+
+	if cfg.Debug {
+		DB = DB.Debug()
+	}
 	logger.Logger.Info("init mysql ok")
 }
 
 // InitRedis 初始化Redis
-func InitRedis(addr, password string) {
+func InitRedis(cfg *config.Redis) {
 	logger.Logger.Info("init redis")
 	RedisCli = redis.NewClient(&redis.Options{
-		Addr:     addr,
+		Addr:     cfg.Addr,
 		DB:       0,
-		Password: password,
+		Password: cfg.Password,
 	})
 
-	_, err := RedisCli.Ping().Result()
-	if err != nil {
+	if _, err := RedisCli.Ping().Result(); err != nil {
 		panic(err)
 	}
-
 	logger.Logger.Info("init redis ok")
 }
 
 // InitByTest 初始化数据库配置，仅用在单元测试
 func InitByTest() {
 	fmt.Println("init db")
-	logger.Target = logger.Console
-	logger.Init()
 
-	InitMysql(config.Logic.MySQL)
-	InitRedis(config.Logic.RedisIP, config.Logic.RedisPassword)
+	config.Init("config.yaml")
+
+	logger.Init("im/db_test.log", logger.Console, "debug")
+
+	InitMysql(config.GetMysql())
+	InitRedis(config.GetRedis())
+}
+
+func autoCreateMysql(cfg *config.Mysql) {
+	var (
+		db  *sql.DB
+		err error
+	)
+
+	if !cfg.AutoCreateDB {
+		return
+	}
+
+	// 连接数据库
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/mysql", cfg.Username, cfg.Password, cfg.Host, cfg.Port)
+	if db, err = sql.Open("mysql", dsn); err != nil {
+		panic(fmt.Sprintf("open mysql failed, dsn: %s", dsn))
+	}
+	defer func() {
+		_ = db.Close()
+	}()
+
+	// 执行创建数据库命令
+	query := fmt.Sprintf("CREATE DATABASE IF NOT EXISTS %s DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;", cfg.DBName)
+	_, err = db.Exec(query)
+	if err != nil {
+		panic("create database exec failed.")
+	}
+	logger.Logger.Info("create database success.")
 }

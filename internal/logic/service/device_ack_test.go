@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 	"fmt"
-	_ "gim/internal/logic/dao"
-	"gim/pkg/db"
+	_ "im/internal/logic/dao"
+	"im/pkg/db"
 	"testing"
 )
 

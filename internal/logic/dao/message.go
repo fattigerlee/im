@@ -2,9 +2,9 @@ package dao
 
 import (
 	"fmt"
-	"gim/internal/logic/model"
-	"gim/pkg/db"
-	"gim/pkg/gerrors"
+	"im/internal/logic/model"
+	"im/pkg/db"
+	"im/pkg/gerrors"
 )
 
 const messageTableNum = 1

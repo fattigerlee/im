@@ -2,13 +2,13 @@ package service
 
 import (
 	"context"
-	"gim/internal/logic/cache"
-	"gim/internal/logic/dao"
-	"gim/internal/logic/model"
-	"gim/pkg/gerrors"
-	"gim/pkg/logger"
-	"gim/pkg/pb"
-	"gim/pkg/rpc"
+	"im/internal/logic/cache"
+	"im/internal/logic/dao"
+	"im/internal/logic/model"
+	"im/pkg/gerrors"
+	"im/pkg/logger"
+	"im/pkg/pb"
+	"im/pkg/rpc"
 )
 
 type groupUserService struct{}

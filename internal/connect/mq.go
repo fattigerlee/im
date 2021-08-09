@@ -1,11 +1,11 @@
 package connect
 
 import (
-	"gim/config"
-	"gim/pkg/db"
-	"gim/pkg/logger"
-	"gim/pkg/pb"
-	"gim/pkg/topic"
+	"im/config"
+	"im/pkg/db"
+	"im/pkg/logger"
+	"im/pkg/pb"
+	"im/pkg/topic"
 
 	"github.com/go-redis/redis"
 
@@ -15,7 +15,7 @@ import (
 
 func StartSubscribe() {
 	channel := db.RedisCli.Subscribe(topic.PushRoomTopic, topic.PushAllTopic).Channel()
-	for i := 0; i < config.Connect.SubscribeNum; i++ {
+	for i := 0; i < config.GetConnectServer().SubscribeNum; i++ {
 		go handleMsg(channel)
 	}
 }

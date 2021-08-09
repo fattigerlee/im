@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	"gim/pkg/pb"
-	"gim/pkg/rpc"
+	"im/pkg/pb"
+	"im/pkg/rpc"
 )
 
 type authService struct{}
