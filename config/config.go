@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
+	"im/pkg/logger"
 )
 
 type RpcAddr struct {
@@ -118,17 +119,18 @@ func GetRedis() *Redis {
 func Init(filePath string) {
 	viper.SetConfigFile(filePath)
 	if err := viper.ReadInConfig(); err != nil {
-		panic(fmt.Sprintf("read config error: %v", err))
+		logger.Error("read config error, err: %v", err)
+		return
 	}
 
 	viper.WatchConfig()
 	viper.OnConfigChange(func(in fsnotify.Event) {
 		if err := viper.ReadInConfig(); err != nil {
-			fmt.Println("config change, reload failed.")
+			logger.Error("config change, reload failed")
 			return
 		}
-		fmt.Println("config change, reload success.")
+		logger.Info("config change, reload success")
 	})
 
-	fmt.Printf("using config file: %s\n", viper.ConfigFileUsed())
+	logger.Info("using config file: %s", viper.ConfigFileUsed())
 }

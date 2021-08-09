@@ -28,10 +28,13 @@ rm -rf *.out *.log
 
 echo "启动file_server服务"
 nohup ./file_server &
+sleep 1
 
 echo "启动logic_server服务"
 nohup ./logic_server &
+sleep 1
 
 echo "启动connect_server服务"
 nohup ./connect_server &
+sleep 1
 

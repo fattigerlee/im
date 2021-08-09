@@ -17,7 +17,7 @@ var (
 
 // InitMysql 初始化MySQL
 func InitMysql(cfg *config.Mysql) {
-	logger.Logger.Info("init mysql")
+	logger.Info("init mysql")
 
 	// 所有表默认以im_开头
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
@@ -35,12 +35,12 @@ func InitMysql(cfg *config.Mysql) {
 	if cfg.Debug {
 		DB = DB.Debug()
 	}
-	logger.Logger.Info("init mysql ok")
+	logger.Info("init mysql ok")
 }
 
 // InitRedis 初始化Redis
 func InitRedis(cfg *config.Redis) {
-	logger.Logger.Info("init redis")
+	logger.Info("init redis")
 	RedisCli = redis.NewClient(&redis.Options{
 		Addr:     cfg.Addr,
 		DB:       0,
@@ -50,15 +50,14 @@ func InitRedis(cfg *config.Redis) {
 	if _, err := RedisCli.Ping().Result(); err != nil {
 		panic(err)
 	}
-	logger.Logger.Info("init redis ok")
+	logger.Info("init redis ok")
 }
 
 // InitByTest 初始化数据库配置，仅用在单元测试
 func InitByTest() {
-	fmt.Println("init db")
+	logger.Info("init db")
 
 	config.Init("config.yaml")
-
 	logger.Init("im/db_test.log", logger.Console, "debug")
 
 	InitMysql(config.GetMysql())
@@ -78,7 +77,8 @@ func autoCreateMysql(cfg *config.Mysql) {
 	// 连接数据库
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/mysql", cfg.Username, cfg.Password, cfg.Host, cfg.Port)
 	if db, err = sql.Open("mysql", dsn); err != nil {
-		panic(fmt.Sprintf("open mysql failed, dsn: %s", dsn))
+		logger.Error("open mysql failed, dsn: %s", dsn)
+		return
 	}
 	defer func() {
 		_ = db.Close()
@@ -88,7 +88,8 @@ func autoCreateMysql(cfg *config.Mysql) {
 	query := fmt.Sprintf("CREATE DATABASE IF NOT EXISTS %s DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;", cfg.DBName)
 	_, err = db.Exec(query)
 	if err != nil {
-		panic("create database exec failed.")
+		logger.Error("create database exec failed, err: %v", err)
+		return
 	}
-	logger.Logger.Info("create database success.")
+	logger.Info("create database success")
 }

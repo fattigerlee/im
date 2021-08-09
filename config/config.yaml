@@ -20,7 +20,7 @@ connect_server:
   local_addr: :50000
   local_ws_addr: :8080
   subscribe_num: 100
-  log_file_path: logic_server.log
+  log_file_path: connect_server.log
   log_level: debug
   log_target: console
 
